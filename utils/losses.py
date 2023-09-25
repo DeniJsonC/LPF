@@ -241,65 +241,6 @@ class EdgeLoss(nn.Module):
     def forward(self, x, y):
         loss = self.loss(self.laplacian_kernel(x), self.laplacian_kernel(y))
         return loss
-
-class PSNRLoss_EX(nn.Module):
-
-    def __init__(self, loss_weight=1.0, reduction='mean', toY=False):
-        super(PSNRLoss_EX, self).__init__()
-        assert reduction == 'mean'
-        self.loss_weight = loss_weight
-        self.scale = 10 / np.log(10)
-        self.toY = toY
-        self.coef = torch.tensor([65.481, 128.553, 24.966]).reshape(1, 3, 1, 1)
-        self.first = True
-
-    def forward(self, pred, target):
-        assert len(pred.size()) == 4
-        if self.toY:
-            if self.first:
-                self.coef = self.coef.to(pred.device)
-                self.first = False
-
-            pred = (pred * self.coef).sum(dim=1).unsqueeze(dim=1) + 16.
-            target = (target * self.coef).sum(dim=1).unsqueeze(dim=1) + 16.
-
-            pred, target = pred / 255., target / 255.
-            pass
-        assert len(pred.size()) == 4
-
-        return self.loss_weight * self.scale * torch.log(((pred - target) ** 2).mean(dim=(1, 2, 3)) + 1e-8).mean()
-
-class LumLoss(nn.Module):
-
-    def __init__(self, loss_weight=1.0, reduction='mean', toY=False):
-        super(LumLoss, self).__init__()
-        if reduction not in ['none', 'mean', 'sum']:
-            raise ValueError(f'Unsupported reduction mode: {reduction}. '
-                             f'Supported ones are: {_reduction_modes}')
-        self.reduction=reduction
-        self.loss_weight = loss_weight
-
-
-    def forward(self, pred, target):
-        # pred_mean=pred.mean(dim=[4,3])
-
-        target_mean=target.mean(dim=[4,3])#[B,3,patch_n]
-
-        # pred_mean=pred_mean.unsqueeze(-1).unsqueeze(-1)
-        target_mean=target_mean.unsqueeze(-1).unsqueeze(-1) #[B,3,patch_n,1,1]
-
-        # pred_std=pred.std(dim=[4,3])
-        target_std=target.std(dim=[4,3])#[B,3,patch_n,1]
-
-        # pred_std=(pred_std+1.0e-6).unsqueeze(-1).unsqueeze(-1)
-        target_std=(target_std+1.0e-6).unsqueeze(-1).unsqueeze(-1)
-
-        x=(pred-target_mean)/target_std
-        y=(target-target_mean)/target_std #[B,1,patch_n,1]
-
-
-        return self.loss_weight * l1_loss(
-            x,y, weight=None, reduction=self.reduction)
         
 class ULoss(nn.Module):
     def __init__(self,loss_weight=1.0, reduction='mean',):
