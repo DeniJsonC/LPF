@@ -27,7 +27,7 @@ python demo.py --input_dir images_folder_path --result_dir save_images_here --we
 
 ## Train  
 The train code will be released soon! 
-But you can train our model by writing a simply training script.
+But you can train our model by writing a simple training script.
   
 - Dataset:  
   The preparation of dataset in more detail, see [datasets/README.md](datasets/README.md).  
@@ -58,7 +58,7 @@ python evaluation.py -dirA images_folder_path -dirB images_folder_path -type ima
   volume={},
   number={},
   pages={885-889},
-  doi={10.1109/ICIP49359.2023.10222843}}
+  doi={10.1109/ICIP49359.2023.10222843}}  
 ```
 ## Contact
 Should you have any question, please contact dj.chen112@gmail.com
