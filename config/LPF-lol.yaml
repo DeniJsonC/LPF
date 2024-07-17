@@ -1,0 +1,51 @@
+# Training configuration
+GPU: [0]
+
+VERBOSE: False
+
+MODEL:
+  MODE: 'LPF-lol'
+
+SCALE_TRAINING:
+  BASE: 256
+  SCALE: 64
+  STEP: 3
+  CROP: True
+  SORT: 0   #1 represents descending and 0 represents ascending
+  TOTAL_EPOCHS: 1000
+  WATCH_EPOCHS: 19
+  BATCH: [2,3,5,8]  #it depends on your GPU's memory , 'BASE' settings and 'SCALE' settings 
+DATASET:
+  MIX_AUG: True
+  DATA_AUG: True
+  CROP: [True,]
+  TRANSFORM: False
+  BRIGHTNESS: [0.8,1.2]
+  CONTRAST: [0.95,1.2]
+  SATURATION: [0.95,1.2]
+  TRAIN_PS: [256,]
+  VAL_PS: [256,]
+  VAL_CROP: True
+  MATCH_SIZE: False
+  VAL_RESIZE: False
+  TRAIN_DIR: '../dataset/LOLdataset/our485/'       # path to training data
+  VAL_DIR: '../dataset/LOLdataset/eval15/' # path to validation data
+  SAVE_DIR: './checkpoints'           # path to save models and images
+
+# Optimization arguments.Progressive training
+OPTIM:
+  TOTAL_EPOCHS: 650
+  BATCH: [8,]
+  EPOCHS: [120,]
+  # EPOCH_DECAY: [10]
+  LR_INITIAL: 1.25e-4
+  LR_MIN: 1.0e-6
+  # BETA1: 0.9
+
+TRAINING:
+  VAL_AFTER_EVERY: 1
+  RESUME: False
+  SCALE_TRAINING: True
+  SAVE_VAL_RESULTS: True
+  SAVE_DIR: './results/LPF-lol'
+
