@@ -27,7 +27,7 @@ torch.manual_seed(GLOBALSEED)
 torch.cuda.manual_seed_all(GLOBALSEED)
 
 ## Load yaml configuration file
-with open('config/RRNet-lol.yaml', 'r') as config:
+with open('config/LPF-lol.yaml', 'r') as config:
     opt = yaml.safe_load(config)
 Train = opt['TRAINING']
 OPT = opt['OPTIM']
